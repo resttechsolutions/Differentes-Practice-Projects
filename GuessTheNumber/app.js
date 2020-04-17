@@ -6,37 +6,67 @@ class Guess{
 
 class UI{
     checkNumber(num){
-        const random = document.getElementById('random');
+        const random = document.querySelector('#random');
         const element = document.createElement('div');
-        let result;
+        let message;
+        let cssClass;
         const randomNum = Math.floor(Math.random() * 11);
 
         if (num == randomNum) {
-            result = 'Win!';
+            message = 'Win!';
+            cssClass = 'success';
+
+            this.showMessage(message,cssClass);
         }else {
-            result = 'Loose!';
+            message = 'Loose!';
+            cssClass = 'danger';
+
+            this.showMessage(message, cssClass);
         }
 
         element.innerHTML = `
             <div class="card text-center mb-4">
-                <div class="card-body">
-                    <span class="h3 text-danger">You ${result}</span> 
-                    <strong class="text-warning">Your number is ${num} and the answer is ${randomNum}.</strong>
+                <div class="card-body alert-${cssClass}">
+                    <h1 id="result">Your number is ${num} and the answer is ${randomNum}.</h1>
                 </div>
             </div>
         `;
 
         random.appendChild(element);
+
+        setTimeout(function(){
+            document.querySelector('#result').parentElement.parentElement.remove();
+        }, 3000);
     }
 
+    showMessage(message, cssClass){
+        const div = document.createElement('div');
+        
+        div.appendChild(document.createTextNode(message));
+        div.className = `alert alert-${cssClass} mt-2`;
+
+        // Show in DOM
+
+        const container = document.querySelector('.container');
+        const app = document.querySelector('#app');
+
+        container.insertBefore(div,app);
+
+        setTimeout(function(){
+            document.querySelector('.alert').remove();
+        }, 3000);
+    }
+
+
+
     resetForm(){
-        document.getElementById('play-form').resetForm();
+        document.querySelector('#play-form').reset();
     }
 }
 
 //DOM EVENTS
-document.getElementById('play-form').addEventListener('submit', function(e){
-    const num = document.getElementById('user-number').value;
+document.querySelector('#play-form').addEventListener('submit', function(e){
+    const num = document.querySelector('#user-number').value;
 
     let guess = new Guess();
 
@@ -46,9 +76,8 @@ document.getElementById('play-form').addEventListener('submit', function(e){
         num
     }
 
-    console.log(guess.num);
-
     ui.checkNumber(guess.num);
+    ui.resetForm();
 
     e.preventDefault();
     
