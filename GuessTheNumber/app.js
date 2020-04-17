@@ -27,7 +27,7 @@ class UI{
         element.innerHTML = `
             <div class="card text-center mb-4">
                 <div class="card-body alert-${cssClass}">
-                    <h1 id="result">Your number is ${num} and the answer is ${randomNum}.</h1>
+                    <h3 id="result">Your number is ${num} and the answer is ${randomNum}.</h3>
                 </div>
             </div>
         `;
@@ -36,7 +36,7 @@ class UI{
 
         setTimeout(function(){
             document.querySelector('#result').parentElement.parentElement.remove();
-        }, 3000);
+        }, 2000);
     }
 
     showMessage(message, cssClass){
@@ -54,7 +54,7 @@ class UI{
 
         setTimeout(function(){
             document.querySelector('.alert').remove();
-        }, 3000);
+        }, 2000);
     }
 
 
@@ -72,12 +72,18 @@ document.querySelector('#play-form').addEventListener('submit', function(e){
 
     let ui = new UI();
 
-    guess = {
-        num
-    }
+    if (num == 0 ) {
+        return ui.showMessage('Insert a number below', 'danger text-center');
+    } else if (num < 0 || num > 10) {
+        return ui.showMessage('The number must be less than or equal to 10');
+    } else{
+        guess = {
+            num
+        }
 
-    ui.checkNumber(guess.num);
-    ui.resetForm();
+        ui.checkNumber(guess.num);
+        ui.resetForm();
+    }
 
     e.preventDefault();
     
